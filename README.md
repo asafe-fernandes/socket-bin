@@ -18,6 +18,7 @@ Its gonna have 5 diferent types of requests:
 Besides the `POST` and `LOGIN` request, every other request is gonna have a path attached to it:
 ```
 REQUEST PATH
+
 ...
 ```
 ---
