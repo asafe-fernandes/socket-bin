@@ -1,0 +1,54 @@
+@startuml
+skinparam groupInheritance 2
+abstract class Request {
+    # header : string
+    # body : string
+    # type : string
+}
+abstract class Response {
+    # header : string
+    # body : string
+    # statusCode : statusCode
+}
+
+class SimpleServer {
+    - socketHandler : SocketHandler
+    - router : Router
+    + register(String path, String method, Exchange exchange) : void
+    + resolve(String path, String method) : Exchange
+    + listen() : void
+    - parseRequest(BufferedReader reader) : String[]
+}
+
+class Router {
+    - root : RouterNode
+    + register(String path, String method, Exchange exchange) : void
+    + resolve(String path, String method) : Exchange
+    - parse(String path) : String[]
+}
+class RouterNode {
+    nodes : Map<String, RouterNode>
+    methods : Map<String,Exchange>
+
+}
+
+interface Exchange {
+    + handle(Request Request, Response response) : void
+}
+
+class SocketHandler {
+    - serverSocket : ServerSocket
+    - socket : Socket
+    + accept() : void
+    + close() : void
+    + getWriter() : BufferedWriter
+    + getReader() : BufferedReader
+}
+
+RouterNode --* Router : use
+SimpleServer *-- Router: use
+SimpleServer *-- SocketHandler : use
+
+Exchange *-- Request : uses as argument
+Exchange *-- Response : uses as argument
+@enduml
